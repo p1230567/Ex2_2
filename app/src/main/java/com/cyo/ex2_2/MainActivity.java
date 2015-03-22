@@ -22,6 +22,8 @@ import java.util.List;
 public class MainActivity extends Activity {
     private List<team> list;
     private ListView listview;
+    private TextView tv_num;
+    private TextView tv_name;
 
     private class teamAdapter extends BaseAdapter {
         private LayoutInflater layoutInflater;
@@ -41,7 +43,7 @@ public class MainActivity extends Activity {
             list.add(new team(R.drawable.p9, 9, "西雅圖水手"));
             list.add(new team(R.drawable.p10, 10, "坦帕灣光芒"));
 
-
+//          ???????
             layoutInflater = LayoutInflater.from(context);
         }
 
@@ -63,40 +65,59 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.listview, parent, false);
             }
             // 依照position取得teamList內的team物件
-            team team = list.get(position);
+            //final???
+            final team team = list.get(position);
+
             // 找到convertView子元件imageView，並指定欲顯示的圖檔
             ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
             imageView.setImageResource(team.getTeam_pic());
             // 找到convertView子元件textView，並指定欲顯示的文字值
-            TextView tv_num = (TextView) convertView.findViewById(R.id.tv_num);
+            tv_num = (TextView) convertView.findViewById(R.id.tv_num);
             tv_num.setText(Integer.toString(team.getTeam_num()));
-            TextView tvId = (TextView) convertView.findViewById(R.id.tv_name);
-            tvId.setText(team.getTeam_name());
+            tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+            tv_name.setText(team.getTeam_name());
 
+//          每次產生view時加入tv_num及tv_name的  ClickListener
+            tv_num.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(MainActivity.this, Integer.toString(team.getTeam_num())
+                            , Toast.LENGTH_SHORT).show();
+                }
+            });
+            tv_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(MainActivity.this, team.getTeam_name(), Toast.LENGTH_SHORT).show();
+                }
+            });
             return convertView;
 
         }
     }
 
-    ;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//      設定contextview為activity_main
         setContentView(R.layout.activity_main);
+
         findViews();
 
     }
 
     public void findViews() {
-        listview = (ListView)findViewById(R.id.listView);
+        listview = (ListView) findViewById(R.id.listView);
+//      livtview製造一個Adapter，並且傳入一個物件teamAdapter，該物件傳入MainActivity這個view
         listview.setAdapter(new teamAdapter(this));
+
+//      建立ClickListener監聽listview
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,6 +127,8 @@ public class MainActivity extends Activity {
 //                讓字串跳出顯示
             }
         });
+
+
     }
 
 
