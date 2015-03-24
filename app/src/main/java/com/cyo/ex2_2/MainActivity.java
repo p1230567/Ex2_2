@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
             list.add(new team(R.drawable.p9, 9, "西雅圖水手"));
             list.add(new team(R.drawable.p10, 10, "坦帕灣光芒"));
 
-//          ???????
+//          要Inflater到context上(MainActivity)
             layoutInflater = LayoutInflater.from(context);
         }
 
@@ -66,11 +66,13 @@ public class MainActivity extends Activity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+//            節省資源若convertView沒有建立才尋找R.layout.listview
+//            要貼上去的為layout.listview，貼到parent(MainActivity)上
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.listview, parent, false);
             }
             // 依照position取得teamList內的team物件
-            //final???
+            //OnClickListener匿名內部類別使用該變數，使用final
             final team team = list.get(position);
 
             // 找到convertView子元件imageView，並指定欲顯示的圖檔
